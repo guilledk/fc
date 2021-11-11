@@ -10,9 +10,12 @@
 
 namespace  fc 
 {
-    int init_openssl()
-    {
-      OPENSSL_init_crypto(OPENSSL_INIT_LOAD_CONFIG, NULL);
+   int init_openssl() {
+      static bool initialized = false;
+      if (!initialized) {
+         OPENSSL_init_crypto(OPENSSL_INIT_LOAD_CONFIG, NULL);
+         initialized = true;
+      }
       return 0;
-    }
+   }
 }
