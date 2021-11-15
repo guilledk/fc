@@ -1,10 +1,9 @@
 #include <fc/time.hpp>
 #include <fc/variant.hpp>
-#include <boost/chrono/system_clocks.hpp>
-#include <boost/date_time/posix_time/posix_time.hpp>
 #include <sstream>
 #include <fc/string.hpp>
 #include <fc/exception/exception.hpp>
+#include <boost/date_time/posix_time/posix_time.hpp>
 
 namespace fc {
 
@@ -12,8 +11,7 @@ namespace fc {
   {
      return time_point(
          microseconds(
-             bch::duration_cast<bch::microseconds>(
-                 testing_time_provider::get_instance().get_time()).count()));
+             testing_time_provider::get().get_time()));
   }
 
   fc::string time_point_sec::to_non_delimited_iso_string()const
