@@ -8,11 +8,12 @@
 
 namespace fc {
 
-  namespace bch = boost::chrono;
-
   time_point time_point::now()
   {
-     return time_point( microseconds( bch::duration_cast<bch::microseconds>( bch::system_clock::now().time_since_epoch() ).count() ) );
+     return time_point(
+         microseconds(
+             bch::duration_cast<bch::microseconds>(
+                 testing_time_provider::get_instance().get_time()).count()));
   }
 
   fc::string time_point_sec::to_non_delimited_iso_string()const

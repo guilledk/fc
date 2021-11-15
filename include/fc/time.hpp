@@ -9,6 +9,8 @@
 #endif //// _MSC_VER
 
 namespace fc {
+  namespace bch = boost::chrono;
+
   class microseconds {
     public:
         constexpr explicit microseconds( int64_t c = 0) :_count(c){}
@@ -65,6 +67,36 @@ namespace fc {
        constexpr microseconds operator - (const time_point& m) const { return microseconds(elapsed.count() - m.elapsed.count()); }
     private:
         microseconds elapsed;
+  };
+
+  class testing_time_provider {
+    /*
+     *  This class provides a hook into time_point::now for testing 
+     */
+    private:
+        static testing_time_provider* instance = NULL;
+        time_point now;
+
+        testing_time_provider() {
+            now = time_point(
+                microseconds(bch::duration_cast<bch::microseconds>(
+                    bch::system_clock::now().time_since_epoch()).count()));
+        }
+
+    public:
+        static testing_time_provider* get_instance() {
+            if (!instance)
+                instance = new testing_time_provider();
+            return instance;
+        }
+
+        time_point get_time() {
+            return this->now;
+        }
+
+        void set_time(time_point now) {
+            this->now = now;
+        }
   };
 
   /**
