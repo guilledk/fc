@@ -9,6 +9,7 @@
 #endif //// _MSC_VER
 
 namespace fc {
+
   class microseconds {
     public:
         constexpr explicit microseconds( int64_t c = 0) :_count(c){}
@@ -65,6 +66,35 @@ namespace fc {
        constexpr microseconds operator - (const time_point& m) const { return microseconds(elapsed.count() - m.elapsed.count()); }
     private:
         microseconds elapsed;
+  };
+
+  /*
+   *  This class provides a hook into time_point::now for testing 
+   */
+  class testing_time_provider {
+    public:
+        static testing_time_provider& get() {
+            static testing_time_provider instance; 
+            return instance;
+        }
+    private:
+        uint64_t now;
+        testing_time_provider() { now = 0; }
+
+        // disable some methods
+        testing_time_provider(testing_time_provider const&);
+        void operator=(testing_time_provider const&);
+
+    public:
+        // singleton interface
+        static uint64_t get_time() {
+            return testing_time_provider::get().now;
+        }
+
+        static void set_time(uint64_t time) {
+            testing_time_provider::get().now = time;
+        }
+
   };
 
   /**
