@@ -2,6 +2,7 @@
 #include <stdint.h>
 #include <fc/string.hpp>
 #include <fc/optional.hpp>
+#include <boost/chrono/system_clocks.hpp>
 
 #ifdef _MSC_VER
   #pragma warning (push)
@@ -71,6 +72,7 @@ namespace fc {
   /*
    *  This class provides a hook into time_point::now for testing 
    */
+  namespace bch = boost::chrono;
   class testing_time_provider {
     public:
         static testing_time_provider& get() {
@@ -79,7 +81,10 @@ namespace fc {
         }
     private:
         uint64_t now;
-        testing_time_provider() { now = 0; }
+        testing_time_provider() {
+            now = bch::duration_cast<bch::microseconds>(
+                bch::system_clock::now().time_since_epoch()).count();
+        }
 
         // disable some methods
         testing_time_provider(testing_time_provider const&);
