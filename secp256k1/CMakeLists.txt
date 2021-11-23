@@ -20,7 +20,7 @@ else()
    unset(GMP_LIBRARIES CACHE)
 endif()
 
-add_library(secp256k1 STATIC
+add_library(secp256k1 SHARED
   upstream/src/secp256k1.c
 )
 

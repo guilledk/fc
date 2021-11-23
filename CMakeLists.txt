@@ -5,8 +5,9 @@ SET( DEFAULT_HEADER_INSTALL_DIR usr/include/${target} )
 SET( DEFAULT_LIBRARY_INSTALL_DIR usr/lib )
 SET( DEFAULT_EXECUTABLE_INSTALL_DIR usr/bin )
 SET( CMAKE_DEBUG_POSTFIX _debug )
-SET( BUILD_SHARED_LIBS NO )
+SET( BUILD_SHARED_LIBS YES )
 SET( ECC_IMPL secp256k1 CACHE STRING "secp256k1 or openssl or mixed" )
+set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 set(platformBitness 32)
 if(CMAKE_SIZEOF_VOID_P EQUAL 8)
@@ -122,7 +123,7 @@ set( sources
 
 list(APPEND sources ${fc_headers})
 
-setup_library( fc SOURCES ${sources} LIBRARY_TYPE STATIC DONT_INSTALL_LIBRARY )
+setup_library( fc SOURCES ${sources} LIBRARY_TYPE SHARED DONT_INSTALL_LIBRARY )
 
 function(detect_thread_name)
   include(CheckSymbolExists)
